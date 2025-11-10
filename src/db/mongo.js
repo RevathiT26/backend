@@ -3,10 +3,11 @@ const config = require('../config');
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(config.MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        if (!config.MONGODB_URI) {
+            throw new Error('MONGODB_URI is not defined in environment variables');
+        }
+        
+        await mongoose.connect(config.MONGODB_URI);
         console.log('MongoDB connected successfully');
     } catch (error) {
         console.error('MongoDB connection failed:', error.message);
